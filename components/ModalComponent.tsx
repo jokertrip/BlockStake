@@ -49,6 +49,7 @@ const ModalComponent = ({modalIsOpen, closeModal}: ModelProps) => {
     return (
         <Modal
             isOpen={modalIsOpen}
+            // @ts-ignore
             style={customStyles}
             onRequestClose={closeModal}
         >
