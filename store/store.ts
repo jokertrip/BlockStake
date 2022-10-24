@@ -1,16 +1,14 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
-
+import walletReducer from './reducers/WalletSIice'
 
 const rootReducer = combineReducers({
-
+    walletReducer
 })
 
-export const setupStore = () => {
-    return configureStore({
+export const store = configureStore({
         reducer: rootReducer
     })
-}
 
-export type RootState = ReturnType<typeof rootReducer>
-export type AppStore = ReturnType<typeof setupStore>
-export type AppDispatch = AppStore['dispatch']
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

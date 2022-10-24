@@ -1,29 +1,31 @@
 import {AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {AccountCircle} from "@mui/icons-material";
 import ModalComponent from "../ModalComponent";
+import {useTypedSelector} from "../../hooks/redux";
+import {truncateEthAddress} from "../../utils";
 
 const pages = ['networks', 'about', 'contacts'];
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
     const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+    const [truncateAddress, setTruncateAddress] = useState<string>('')
+
+    const walletAddress = useTypedSelector(state => state.walletReducer.address)
+
+    useEffect(() => {
+        const address = truncateEthAddress(walletAddress)
+        setTruncateAddress(address)
+    }, [walletAddress])
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
     };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
-    };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
     };
 
     const openModal = () => {
@@ -95,6 +97,7 @@ const Header = () => {
                         ))}
                     </Box>
 
+                    <Typography textAlign="center">{truncateAddress}</Typography>
                     <IconButton
                         size="large"
                         aria-label="account of current user"

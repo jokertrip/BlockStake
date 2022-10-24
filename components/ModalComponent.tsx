@@ -2,6 +2,9 @@ import Modal from "react-modal";
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import {makeStyles} from "@mui/styles";
+import {getAddress} from "../utils/web3";
+import {walletSlice} from "../store/reducers/WalletSIice";
+import {useTypedDispatch} from "../hooks/redux";
 
 const customStyles = {
     content: {
@@ -46,6 +49,17 @@ type ModelProps = {
 const ModalComponent = ({modalIsOpen, closeModal}: ModelProps) => {
     const classes = useStyles();
 
+    const { setWalletAddress } = walletSlice.actions
+    const dispatch = useTypedDispatch()
+
+    const handleMetamaskClick = async () => {
+        const address = await getAddress()
+        if(address){
+            dispatch(setWalletAddress(address))
+        }
+        closeModal()
+    }
+
     return (
         <Modal
             isOpen={modalIsOpen}
@@ -54,7 +68,7 @@ const ModalComponent = ({modalIsOpen, closeModal}: ModelProps) => {
             onRequestClose={closeModal}
         >
             <div className={classes.wallets}>
-                <Box className={classes.box}>
+                <Box className={classes.box} onClick={handleMetamaskClick}>
                     <Typography variant="h6" component="h2" >
                         Metamask
                     </Typography>
