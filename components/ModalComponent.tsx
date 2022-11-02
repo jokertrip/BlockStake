@@ -2,7 +2,6 @@ import Modal from "react-modal";
 import React from "react";
 import {Box, Typography} from "@mui/material";
 import {makeStyles} from "@mui/styles";
-import {getAddress} from "../utils/web3";
 import {walletSlice} from "../store/reducers/WalletSIice";
 import {useTypedDispatch} from "../hooks/redux";
 
@@ -53,10 +52,10 @@ const ModalComponent = ({modalIsOpen, closeModal}: ModelProps) => {
     const dispatch = useTypedDispatch()
 
     const handleMetamaskClick = async () => {
-        const address = await getAddress()
-        if(address){
-            dispatch(setWalletAddress(address))
-        }
+        // const address = await getAddress()
+        // if(address){
+        //     dispatch(setWalletAddress(address))
+        // }
         closeModal()
     }
 
