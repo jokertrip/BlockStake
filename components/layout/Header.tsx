@@ -3,22 +3,23 @@ import MenuIcon from "@mui/icons-material/Menu"
 import React, {useEffect, useState} from "react";
 import {AccountCircle} from "@mui/icons-material";
 import ModalComponent from "../ModalComponent";
-import {useTypedSelector} from "../../hooks/redux";
-import {truncateEthAddress} from "../../utils";
+import {useTypedDispatch, useTypedSelector} from "../../hooks/redux";
+import {ellipseAddress, getChainData} from "../../utils";
+import {connect, disconnect} from "../../utils/web3";
+import {walletSlice} from "../../store/reducers/WalletSIice";
 
 const pages = ['networks', 'about', 'contacts'];
 
 const Header = () => {
     const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
     const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
-    const [truncateAddress, setTruncateAddress] = useState<string>('')
+
+    const dispatch = useTypedDispatch()
+    const { setWeb3Provider, resetWeb3Provider } = walletSlice.actions
 
     const walletAddress = useTypedSelector(state => state.walletReducer.address)
-
-    useEffect(() => {
-        const address = truncateEthAddress(walletAddress)
-        setTruncateAddress(address)
-    }, [walletAddress])
+    const chainId = useTypedSelector(state => state.walletReducer.chainId)
+    const walletProvider = useTypedSelector(state => state.walletReducer.provider)
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -28,8 +29,22 @@ const Header = () => {
         setAnchorElNav(null);
     };
 
-    const openModal = () => {
-        setModalIsOpen(true)
+    const connectWallet = async () => {
+        if(walletProvider){
+            try{
+                await disconnect(walletProvider)
+                dispatch(resetWeb3Provider())
+            }catch(e){
+                console.log(e)
+            }
+        } else{
+            try{
+                const { provider, web3Provider, address, network } = await connect()
+                dispatch(setWeb3Provider({provider, web3Provider, address, chainId: network.chainId}))
+            }catch(e){
+                console.log(e)
+            }
+        }
     }
 
     const closeModal = () => {
@@ -97,13 +112,13 @@ const Header = () => {
                         ))}
                     </Box>
 
-                    <Typography textAlign="center">{truncateAddress}</Typography>
+                    <Typography textAlign="center">{ellipseAddress(walletAddress)}{walletProvider? ' || ' : ''}{getChainData(chainId)?.name}</Typography>
                     <IconButton
                         size="large"
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
-                        onClick={openModal}
+                        onClick={connectWallet}
                         color="inherit"
                     >
                         <AccountCircle />
