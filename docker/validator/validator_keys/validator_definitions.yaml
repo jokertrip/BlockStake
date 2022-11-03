@@ -1,0 +1,11 @@
+---
+- enabled: true
+  voting_public_key: "0x825c6bef727dd2052ae65b7767ba7bad1892b035bf0a40afcc613eb3626196d205538d02d8a0696acac4e52eace7598d"
+  type: local_keystore
+  voting_keystore_path: /var/lib/lighthouse/keys/validator_keys/keystore-m_12381_3600_0_0_0-1667478206.json
+  voting_keystore_password: 1234567890
+- enabled: false
+  voting_public_key: "0xa5566f9ec3c6e1fdf362634ebec9ef7aceb0e460e5079714808388e5d48f4ae1e12897fed1bea951c17fa389d511e477"
+  type: local_keystore
+  voting_keystore_path: /home/paul/.lighthouse/validators/0xa5566f9ec3c6e1fdf362634ebec9ef7aceb0e460e5079714808388e5d48f4ae1e12897fed1bea951c17fa389d511e477/voting-keystore.json
+  voting_keystore_password: myStrongpa55word123&$

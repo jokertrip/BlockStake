@@ -1,0 +1,23 @@
+[Unit]
+Description=Lighthouse Ethereum Client Beacon Node (Prater)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=lighthousebeacon
+Group=lighthousebeacon
+Restart=always
+RestartSec=5
+ExecStart=/usr/local/bin/lighthouse bn \
+    --network prater \
+    --datadir /var/lib/lighthouse \
+    --http \
+    --execution-endpoint http://127.0.0.1:8551 \
+    --metrics \
+    --validator-monitor-auto \
+    --checkpoint-sync-url https://goerli.checkpoint-sync.ethdevops.io \
+    --execution-jwt /var/lib/ethereum/jwttoken
+
+[Install]
+WantedBy=multi-user.target

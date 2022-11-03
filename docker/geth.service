@@ -1,0 +1,25 @@
+[Unit]
+Description=Go Ethereum Client - Geth (Goerli)
+After=network.target
+Wants=network.target
+
+[Service]
+User=goeth
+Group=goeth
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutStopSec=180
+ExecStart=geth \
+    --goerli \
+    --http \
+    --http.api / \
+    --http.corsdomain '*' \
+    --datadir /var/lib/goethereum \
+    --metrics \
+    --metrics.expensive \
+    --pprof \
+    --authrpc.jwtsecret=/var/lib/ethereum/jwttoken
+
+[Install]
+WantedBy=default.target
